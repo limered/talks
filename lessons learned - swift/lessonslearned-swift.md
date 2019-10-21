@@ -23,15 +23,12 @@ struct Animal {
 
 # Überblick
 
-1. Bad
-2. Good
-3. Weird
-4. Code
+1. Optionals
+
 
 ---
 
-# The Bad
-## Optionals
+# Optionals
 
 ```swift
 // normale Variable
@@ -120,9 +117,13 @@ class CalendarService: CalendarServiceProtocol{
 ```
 
 ---
-# Good
-## Not Nullable
 
+# Was damit?
+
+- So früh, wie möglich loswerden mit guard
+- Nur im Notfall nutzen
+- Failable Initializer nie nutzen!
+- Native Klassen, die es benutzen adaptieren
 
 ---
 
