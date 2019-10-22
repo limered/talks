@@ -6,25 +6,14 @@ theme: default
 # Lessons Learned - SWIFT
 am Beispiel vom Backup SDK
 
-... oder
-
-```swift
-struct Animal {
-    let species: String
-    init?(species: String) {
-        if species.isEmpty { return nil }
-        self.species = species
-    }
-}
-```
-
 ---
 <!-- paginate: true -->
 
-# Überblick
+# Backup was?
 
-1. Optionals
-
+- SDK für die Hidrive App auf IOS und macOS
+- Nur Backup und Restore Funktion
+- App nicht von uns
 
 ---
 
@@ -32,56 +21,53 @@ struct Animal {
 
 ```swift
 // normale Variable
-var a = 1        // Werttyp (Int)
-var b = NSDate() // Referenztyp (NSDate)
-var c:Int        // Int, hat noch kein Wert
-var d:NSDate     // NSDate, hat noch kein Wert
+var a = 1        
+var b = NSDate() 
+var c:Int        // compile error
+var d:NSDate     // compile error
+
 print(c)         // error: variable 'c' used before being initialized
 
 // Optionals
-var e:Int?       // enthält anfänglich nil
-var f:NSDate?    // enthält anfänglich nil
+var e:Int?       // nil
+var f:NSDate?    // nil
 
 // Implicitly Unwrapped Optionals
-var g:Int!       // enthält anfänglich nil
-var h:NSDate!    // enthält anfänglich nil
+var g:Int!       // nil
+var h:NSDate!    // nil
 
 ```
 ---
 
 ```swift
-var e:Int?       // enthält anfänglich nil
+var e:Int?
 e = 3
-println(e + 1)    // nicht erlaubt!
-println(e! + 1)
+print(e + 1)     // error!
+print(e! + 1)
 
-var g:Int!       // enthält anfänglich nil
+var g:Int!
 g=3
-println(g+1)     // OK
+print(g+1)       // OK
+
+print(g!)        // error, if nil
 ```
 
 ---
 
+![bg 60%](https://sweatpantsandcoffee.com/wp-content/uploads/2017/10/940x450-Ryan-Reynold-Reaction-GIFs.jpg)
+
+---
+
 ```swift
-struct Animal {
-    let species: String
-    init?(species: String) {
-        if species.isEmpty { return nil }
-        self.species = species
-    }
+class ViewController: UIViewController {
+  @IBOutlet weak var textView: UITextView!  // not nil shortly before View init
+  ...
 }
-
-func checkAnimal () -> Bool {
-    let animal = Animal(species:"")
-    guard animal != nil else { return false }
-    return true
-}
-
 ```
 
 ---
  
-### In Anwendung
+## Example: IoC
 ```swift
 class CalendarService: CalendarServiceProtocol{
     
@@ -99,7 +85,7 @@ class CalendarService: CalendarServiceProtocol{
 
 ---
 
-### Besser
+## Besser
 
 ```swift
 class CalendarService: CalendarServiceProtocol{
@@ -118,12 +104,90 @@ class CalendarService: CalendarServiceProtocol{
 
 ---
 
+## Guarding
+
+```swift
+struct Animal {
+    let species: String
+    init?(species: String) {
+        if species.isEmpty { return nil }
+        self.species = species
+    }
+}
+
+func isAnimalAlive (_ animal: Animal?) -> Bool {
+    guard let notNilAnimal = animal else { return false }
+    print(notNilAnimal)
+    return true
+}
+
+let anim = Animal(species:"")
+print(isAnimalAlive(anim))
+
+```
+
+---
+
+## Example: Guard
+
+```swift
+func merge(_ mediaMetaData: MediaMetaData?) -> MediaMetaData? {
+    guard let mediaMetaData = mediaMetaData else {
+        return MediaMetaData(items: [])
+    }
+    return MediaMetaData(items: mediaMetaData.items)
+}
+```
+
+```swift
+func merge(_ mediaMetaData: MediaMetaData?) -> MediaMetaData {
+    if mediaMetaData == nil { 
+        return MediaMetaData(items: [])
+    } 
+    return MediaMetaData(items: mediaMetaData!.items)
+}
+```
+---
+
+```swift
+open class Version : ... {
+    ...
+    init?(_ string: String) {
+        let regex = try! NSRegularExpression(pattern: "^\\s*(\\d+)\\.(\\d+)\\s*$", options: [])
+
+        guard let match = regex.firstMatch(
+            in: string, options:[], range: NSRange(location: 0, length: string.length)
+        ) 
+        else 
+        {
+            return nil
+        }
+        ...
+    }
+    ...
+
+    static func deserialize(_ str: Any?) throws -> Version {
+        guard let versionString = str.string else {throw JsonError.serializationFailed}
+        guard let v = Version(versionString) else {throw JsonError.serializationFailed}
+        return v
+    }
+}
+```
+
+---
+
+# Example: Native Classes
+
+
+
+---
+
 # Was damit?
 
 - So früh, wie möglich loswerden mit guard
 - Nur im Notfall nutzen
-- Failable Initializer nie nutzen!
 - Native Klassen, die es benutzen adaptieren
+- Failable Initializer nie nutzen!
 
 ---
 
@@ -139,3 +203,4 @@ class CalendarService: CalendarServiceProtocol{
 let x = foo * bar as Baz
 let y = foo && bar as Baz
 ```
+
