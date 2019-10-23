@@ -3,7 +3,7 @@ marp: true
 theme: default
 ---
 
-# Lessons Learned - SWIFT
+# Tales From the Frontline - Swift Optionals Edition
 am Beispiel vom Backup SDK
 
 ---
@@ -128,8 +128,6 @@ print(isAnimalAlive(anim))
 
 ---
 
-## Example: Guard
-
 ```swift
 func merge(_ mediaMetaData: MediaMetaData?) -> MediaMetaData? {
     guard let mediaMetaData = mediaMetaData else {
@@ -141,13 +139,15 @@ func merge(_ mediaMetaData: MediaMetaData?) -> MediaMetaData? {
 
 ```swift
 func merge(_ mediaMetaData: MediaMetaData?) -> MediaMetaData {
-    if mediaMetaData == nil { 
-        return MediaMetaData(items: [])
+    if mediaMetaData != nil { 
+        return MediaMetaData(items: mediaMetaData!.items)
     } 
-    return MediaMetaData(items: mediaMetaData!.items)
+    return MediaMetaData(items: [])
 }
 ```
 ---
+
+## Example: Guard
 
 ```swift
 open class Version : ... {
@@ -176,31 +176,140 @@ open class Version : ... {
 
 ---
 
-# Example: Native Classes
-
-
-
----
-
-# Was damit?
-
-- So früh, wie möglich loswerden mit guard
-- Nur im Notfall nutzen
-- Native Klassen, die es benutzen adaptieren
-- Failable Initializer nie nutzen!
-
----
-
-## @testable
-
-
----
-
-# Weird
-## Operator Precedence
+## Example: Wrapper mit Optionals
 
 ```swift
-let x = foo * bar as Baz
-let y = foo && bar as Baz
+guard let asset = PHAsset.fetchAssets(withLocalIdentifiers: [video.id], options: nil).firstObject
+    else { return Future<Void>(fail: BackupSDKError.mediaNoAssetWithGivenLocalId) }
 ```
 
+```swift
+class PHAssetsAdapter: PHAssetsProtocol{
+    func fetchAssets(withLocalIdentifiers identifiers: [String]) -> PHFetchResultProtocol
+    {
+        let fetchAsset = PHAsset.fetchAssets(withLocalIdentifiers: identifiers, options: nil)
+        return PHFetchResultAdapter(result: fetchAsset)
+    }
+}
+```
+---
+
+```swift
+class PHFetchResultAdapter: PHFetchResultProtocol{
+    
+    let fetchResult: PHFetchResult<PHAsset>!
+    
+    init(result: PHFetchResult<PHAsset>)
+    {
+        self.fetchResult = result
+    }
+    
+    func getFetchResults() -> PHFetchResult<PHAsset>
+    {
+        return fetchResult
+    }
+    
+    func firstObject() -> PHAsset?
+    {
+        return fetchResult.firstObject
+    }
+}
+```
+
+---
+
+```swift
+let fetchedAsset = self.pHAssetsAdapter.fetchAssets(withLocalIdentifiers: [video.id])
+guard let asset = fetchedAsset.firstObject()
+    else {
+        return Future<Void>(fail: BackupSDKError.mediaNoAssetWithGivenLocalId)
+}
+```
+<!-- Scoped style -->
+<style scoped>
+h1 {
+  color: red;
+}
+</style>
+
+# Fatal error: Unexpectedly found nil while unwrapping an Optional value
+
+---
+
+```swift
+class PHFetchResultAdapter: PHFetchResultProtocol{
+    
+    let fetchResult: PHFetchResult<PHAsset>!
+    
+    init(result: PHFetchResult<PHAsset>)
+    {
+        self.fetchResult = result
+    }
+
+    ...
+
+    func firstObject() -> PHAsset?
+    {
+        return fetchResult.firstObject
+    }
+}
+```
+
+---
+
+![bg fit](adapter.jpg)
+
+---
+
+
+# Was tun?
+
+- Fail early, am besten zur compilezeit
+- So früh, wie möglich loswerden mit 
+    - ```guard``` / ```if let``` / Nil-Coalescing Operator (```self.state = newState ?? .default```)
+- Nur im Ausnahmefall nutzen
+    - ```@IBOutlet weak var myLabel: UILabel!```
+- Native Klassen, die es benutzen adaptieren / wrappen
+- Bei Adaptern/Wrappern aufpassen!
+- Failable Initializer: Don't!
+
+---
+
+# Andere Meinungen
+
+[OPTIONALS IN SWIFT — FLUCH ODER SEGEN?](https://kofler.info/optionals-in-swift-fluch-oder-segen/)
+[Swift: Banning force unwrapping optionals](https://blog.timac.org/2017/0628-swift-banning-force-unwrapping-optionals/)
+[Stack Overflow - Why would you create a "Implicitly Unwrapped Optional"?](https://stackoverflow.com/questions/24006975/why-create-implicitly-unwrapped-optionals-since-that-implies-you-know-theres)
+[SonarSource - Implicitly unwrapped optionals should not be used](https://rules.sonarsource.com/swift/RSPEC-1438?search=optionals)
+
+---
+
+# Coole Swift Dinge
+- Vermeidung von Nil zur compilezeit
+- ```@testable import``` ...
+- Error Handling
+```swift
+func handleFailedRestore() throws {
+    try fileManager.createDirectory(
+        atPath: folderPath, withIntermediateDirectories: true, attributes: nil
+    )
+}
+```
+---
+
+```swift
+func getTotalRemainingFreeSpaceInBytes() -> Int64? {
+    let documentDirectory = NSSearchPathForDirectoriesInDomains(
+        .documentDirectory, .userDomainMask, true
+    ).last!
+    guard
+        let systemAttributes = try? FileManager.default.attributesOfFileSystem(
+            forPath: documentDirectory
+        ),
+        let freeSize = systemAttributes[.systemFreeSize] as? NSNumber
+    else {
+            return nil
+    }
+    return freeSize.int64Value
+}
+```
