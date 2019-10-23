@@ -3,7 +3,7 @@ marp: true
 theme: default
 ---
 
-# Tales From the Frontline - Swift Optionals Edition
+# TF² - Swift Optionals Edition
 am Beispiel vom Backup SDK
 
 ---
@@ -215,6 +215,9 @@ class PHFetchResultAdapter: PHFetchResultProtocol{
     }
 }
 ```
+---
+
+![bg fit](https://images.squarespace-cdn.com/content/v1/5592eb03e4b051859f0b377f/1435819782121-D6Q8U7JMPDB8VLI1H7NP/ke17ZwdGBToddI8pDm48kDvIO3r_6WWmLhV15rNd2fRZw-zPPgdn4jUwVcJE1ZvWEtT5uBSRWt4vQZAgTJucoTqqXjS3CfNDSuuf31e0tVH0moX_2pVRSQJz49ubibKpa5DuSe_0NlmWy9w89H2Qkek-6xuMAojoFgTHCKHzke4/iss0p.jpg?format=1500w)
 
 ---
 
@@ -281,6 +284,8 @@ class PHFetchResultAdapter: PHFetchResultProtocol{
 [Swift: Banning force unwrapping optionals](https://blog.timac.org/2017/0628-swift-banning-force-unwrapping-optionals/)
 [Stack Overflow - Why would you create a "Implicitly Unwrapped Optional"?](https://stackoverflow.com/questions/24006975/why-create-implicitly-unwrapped-optionals-since-that-implies-you-know-theres)
 [SonarSource - Implicitly unwrapped optionals should not be used](https://rules.sonarsource.com/swift/RSPEC-1438?search=optionals)
+[THE IMPLICITLY UNWRAPPED OPTIONAL & WHEN TO USE IT](https://krakendev.io/blog/when-to-use-implicitly-unwrapped-optionals)
+
 
 ---
 
@@ -313,3 +318,7 @@ func getTotalRemainingFreeSpaceInBytes() -> Int64? {
     return freeSize.int64Value
 }
 ```
+
+---
+
+[https://github.com/limered/talks](https://github.com/limered/talks)
