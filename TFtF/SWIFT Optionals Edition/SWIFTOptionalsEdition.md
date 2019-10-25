@@ -1,15 +1,15 @@
 ---
 marp: true
-theme: default
+theme: dracula
 ---
 
 # TF² - Swift Optionals Edition
-am Beispiel vom Backup SDK
+# am Beispiel vom Backup SDK
 
 ---
 <!-- paginate: true -->
 
-# Backup was?
+## Backup was?
 
 - SDK für die Hidrive App auf IOS und macOS
 - Nur Backup und Restore Funktion
@@ -17,7 +17,7 @@ am Beispiel vom Backup SDK
 
 ---
 
-# Optionals
+## Basic
 
 ```swift
 // normale Variable
@@ -129,7 +129,7 @@ print(isAnimalAlive(anim))
 ---
 
 ```swift
-func merge(_ mediaMetaData: MediaMetaData?) -> MediaMetaData? {
+func merge(mediaMetaData: MediaMetaData?) -> MediaMetaData? {
     guard let mediaMetaData = mediaMetaData else {
         return MediaMetaData(items: [])
     }
@@ -228,14 +228,8 @@ guard let asset = fetchedAsset.firstObject()
         return Future<Void>(fail: BackupSDKError.mediaNoAssetWithGivenLocalId)
 }
 ```
-<!-- Scoped style -->
-<style scoped>
-h1 {
-  color: red;
-}
-</style>
 
-# Fatal error: Unexpectedly found nil while unwrapping an Optional value
+# <red>Fatal error: Unexpectedly found nil while unwrapping an Optional value</red>
 
 ---
 
