@@ -66,7 +66,7 @@ class MacOSBackupService : BackupServiceProtocol {
 ```
 ---
 
-## <red>Schön Blöd</red>
+## <red>Schön Blöd!</red>
 
 ```swift
 protocol BackupServiceProtocol {
@@ -76,9 +76,9 @@ protocol BackupServiceProtocol {
 
 ```swift
 class BaseBackupService : BackupServiceProtocol {
-    func createImageMetadate(images: [Image]) -> [ImageMetaData]
+    func createImageMetadate(images: [File]) -> [MetaData]
     func createBackup(
-        images: [Image], imageMetaData: [ImageMetaData]
+        images: [File], imageMetaData: [MetaData]
     ) -> Backup
 }
 ```
@@ -110,16 +110,80 @@ class BackupService : BackupServiceProtocol {
     }
 
     func createBackup(
-        images: [Image], imageMetaData: [ImageMetaData]
+        images: [File], imageMetaData: [MetaData]
     ) -> Backup {...}
 }
 ```
 
 ---
 
+## Was ist mit Videos?
 
+* Weitere <pink>Implementierungen</pink>?
+    ```swift 
+    VideoRepository : RepositoryProtocol
+    ```
+
+* Weitere <pink>Abstraktionen</pink>?
+    ```swift
+    VideoBackupService : BackupServiceProtocol
+    ```
 
 ---
+
+## Nope, Strategy!
+
+```swift
+protocol FileLoadStrategyProtocol{
+    func getFiles() -> [File]
+}
+```
+
+```swift
+class VideoLoadStrategy: FileLoadStrategyProtocol {
+    func getFiles() -> [File]{
+        // Algorithm to load Vieos
+        return videos
+    }
+}
+
+class ImageLoadStrategy: FileLoadStrategyProtocol {
+    func getFiles() -> [File]{
+        // Algorithm to load Images
+        return images
+    }
+}
+```
+
+---
+
+```swift
+class FileLoader : FileLoaderProtocol {
+    func load(using strategy: FileLoadStrategyProtocol) -> [File] {
+        return strategy.getFiles();
+    }
+}
+```
+
+```swift
+class IOSRepository: RepositoryProtocol {
+    private let _fileLoader: FileLoaderProtocol
+
+    func getImages() -> [File] {
+        let imageStrategy = ImageLoadStrategy()
+        return _fileLoader.load(using: imageStrategy)
+    }
+
+    func getVideos() -> [File] {
+        // Alternative for better Tests
+        let videoStrategy: VideoLoadStrategy = IoC.Resolve()
+        return _fileLoader.load(using: videoStrategy)
+    }
+}
+```
+
+---
+
 
 <center>
 
