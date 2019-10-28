@@ -4,7 +4,7 @@
  * @theme dracula
  * @author Emil Wasilewski
  *
- * @auto-scaling false
+ * @auto-scaling true
  * @size 16:9 960px 720px 
  */
 
@@ -34,6 +34,10 @@ green {
 
 pink {
     color: #ff79c6;
+}
+
+orange {
+  color: #ffb86c;
 }
 
 red {
