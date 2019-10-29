@@ -250,6 +250,30 @@ public SetsTomorrowsDate(){
 # <green>Pass</green>
 
 ---
+
+## Geiler Scheiß aber wann benutze ich das?
+### Wrapper / Adapter
+* Meist an <orange>Applikationsgrenzen</orange>
+* <orange>Schnittstellen</orange> zu Fremdcode / Lagacy Code
+* Nicht passende Schnittstellen kompatibel machen
+
+### Decorator
+* Mocks
+* Kombination von Effekten 
+    ```cs
+    class CompressionDecorator : DataSource {...}
+    class EncryptionDecorator : CompressionDecorator {...}
+    ```
+
+---
+
+## Nachteile
+* Mehr Code
+* Configuration wird komplexer
+* Decorator-Chaining ist nicht übersichtlich und rigide -> möglichst flach halten
+
+---
+
 <center>
 
 [https://github.com/limered/talks](https://github.com/limered/talks)
