@@ -184,6 +184,48 @@ class IOSRepository: RepositoryProtocol {
 
 ---
 
+### Weitere mögliche Strategies
+
+```swift
+class PhotoLibraryStrategy : RepositoryProtocol {
+    func getFiles() -> [File]{
+        return loadImagesUsingPHAsset();
+    }
+}
+
+class ICloudPhotoStrategy : RepositoryProtocol {
+    func getFiles() -> [File]{
+        let files = downLoadICloudFiles()
+        return references(to: files)
+    }
+}
+```
+
+---
+
+## Alles supi aber wann benutze ich das?
+### Bridge
+* Monolithische Klasse aufteilen, die mehrere <orange>Intents</orange> umsetzt
+* Erweitern von Klassen in <orange>orthogonale</orange> Richtungen
+* Austausch von Implementierungen zur <orange>Compilezeit</orange> (zur Laufzeit, ähnliche wie Strategy)
+
+---
+
+### Strategy
+* <orange>Unterschiedliche Varianten</orange> von Algorithmen zur Laufzeit austauschen
+* Viele ähnliche Klassen, die sich Details unterscheiden
+* Trennung von <orange>Control Code</orange> und <orange>Worker Code</orange>, der nicht wichtig ist für den Aufbau der Control Schicht
+* Fettes <orange>Switch/If-Else</orange> in eine Klasse/Methode durch das der algorythmus gesteuert wird
+* <green>Wichtig:</green> Die Post Condition / Result muss zwischen den Algorithmen gleich sein
+---
+
+## Nachteile
+
+* Erhöhte Abstraction der App
+* Unterschiede zwischen den Strategies müssen Clienten klar sein
+* Don't overcomplicate!
+
+---
 
 <center>
 
