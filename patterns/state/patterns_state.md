@@ -237,6 +237,10 @@ public async Task ContinueInternal()
 
 ---
 
+![bg 60% drop-shadow](async.jpg)
+
+---
+
 ## Example: LD Unity Framework
 
 ```cs
@@ -328,19 +332,16 @@ private void Awake()
 ```cs
 IoC.Game.GameStateContext.CurrentState
     .Where(state => state is Paused)
-    .Subscribe(_ => ShowPauseInterface());
-```
+    .Subscribe(_ => SetPause());
 
-```cs
-void Update(){
-    if ( IoC.Game.GameStateContext.CurrentState.Value is Paused )
-    {
-        UpdatePauseInterface();
-    }
+void SetPause() 
+{
+    IoC.Game.UpdateAsObservable()
+        .Where(_ => IoC.Game.GameStateContext.CurrentState.Value is Paused)
+        .Subscribe(_ => CheckForContinueClick())
+        .AddTo(IoC.Game.GameStateContext.CurrentState.Value);
 }
-```
 
-```cs
 void OnContinue()
 {
     MessageBroker.Default.Publish(new GameMsgUnpause());
