@@ -8,7 +8,46 @@ theme: dracula
 
 ---
 <!-- paginate: true -->
-## Wozu?
+
+## State is everywhere 
+
+* Routing / Navigation
+* Interfaces
+* Handy Buttons
+* Games
+
+Wichtig einen Weg zu haben, wie man States und Transitions <green>explizit</green> und <green>clean</green> implementiren kann.
+
+---
+
+## Explizit?
+
+```js
+
+function animate(elapsed){
+    if( loadingState == 4 && !playerAdded ) { 
+        updateWeapoSelectionInterface(); 
+    }
+    if( gameRunning && playerAdded ) {
+        updatePlayers(elapsed);
+        ...
+        myPlayer = getPlayerById(myId);
+        if(!myPlayer.isRespawning){
+            updateCamera();
+        }
+    }
+    if( gameRunning && gamePaused ){
+        updatePauseInterface();
+    }
+    renderer.render( scene, camera );
+    if( debug ){ running = false; }
+}
+
+```
+
+---
+
+## Clean?
 ```cs
 class Document 
 {
@@ -36,7 +75,7 @@ class Document
 ```
 
 ---
-
+## Idea
 ```cs
 class Context {
     IState State;
@@ -57,6 +96,8 @@ class ConcreteState : IState {
     }
 }
 ```
+
+
 ---
 ## Example: Sync Client
 
@@ -132,8 +173,7 @@ public interface IState
     ```
 ---
 
-## Probleme (Wie ich sie verstehe :wink: )
-### Asynchronität
+## Problem - Asynchronität
 * Grundsätzlich ist eine State Machine synchron, ein State nach dem Anderen
 * UI und Datei Änderungen sind es nicht
 * Normalerweise kein Problem, weil State-Änderungen abgewiesen werden, wenn sie nicht passen
@@ -193,7 +233,154 @@ public async Task ContinueInternal()
 
 ---
 
+![bg 60% drop-shadow](moar.jpg)
 
+---
+
+## Example: LD Unity Framework
+
+```cs
+public interface IState<T>
+{
+    ReadOnlyCollection<Type> ValidNextStates { get; }
+    void Enter(IStateContext<IState<T>, T> context);
+    bool Exit();
+}
+```
+
+```cs
+public interface IStateContext<TState, T> where TState : IState<T>
+{
+    ReactiveProperty<TState> CurrentState { get; }
+    ReactiveCommand<TState> BevoreStateChange { get; }
+    ReactiveCommand<TState> AfterStateChange { get; }
+    void Start(TState initialState);
+    bool GoToState(TState state);
+}
+```
+
+---
+
+```cs
+[NextValidStates(typeof(GameOver), typeof(Paused))]
+public class Running : BaseState<Game>
+{
+    public override void Enter(StateContext<Game> context)
+    {
+        MessageBroker.Default.Receive<GameMsgEnd>()
+            .Subscribe(end => context.GoToState(new GameOver()))
+            .AddTo(this);
+
+        MessageBroker.Default.Receive<GameMsgPause>()
+            .Subscribe(pause => context.GoToState(new Paused()))
+            .AddTo(this);
+    }
+}
+```
+
+---
+
+```cs
+public class StateContext<T> : IStateContext<BaseState<T>, T>{
+    ...
+    public bool GoToState(BaseState<T> state)
+    {
+        if (!CurrentState.Value.ValidNextStates.Contains(state.GetType()))
+        {
+            return false;
+        }
+
+        _bevoreStateChange.Execute(state);
+
+        CurrentState.Value = state;
+        CurrentState.Value.Enter(this);
+
+        _afterStateChange.Execute(state);
+
+        return true;
+    }
+    ...
+}
+```
+
+---
+
+```cs
+public readonly StateContext<Game> GameStateContext = new StateContext<Game>();
+
+private void Awake()
+{
+    IoC.RegisterSingleton(this);    
+
+    GameStateContext.Start(new Loading());
+
+    InstantiateSystems();
+    Init();
+
+    MessageBroker.Default.Publish(new GameMsgFinishedLoading());
+}
+```
+
+---
+
+## Usage
+
+```cs
+IoC.Game.GameStateContext.CurrentState
+    .Where(state => state is Paused)
+    .Subscribe(_ => ShowPauseInterface());
+```
+
+```cs
+void Update(){
+    if ( IoC.Game.GameStateContext.CurrentState.Value is Paused )
+    {
+        UpdatePauseInterface();
+    }
+}
+```
+
+```cs
+void OnContinue()
+{
+    MessageBroker.Default.Publish(new GameMsgUnpause());
+}
+```
+
+---
+
+## Also, was ist denn jetzt so gut an den Dingern?
+
+* Ausfolmulierung der Applikations-/Objektstates
+* Neue States können eingeführt werden ohne alles aufzubohren (<green>Open/Close</green>)
+* Jeder State kömmert sich genau nur um die Sachen, die für ihn zuständig sind (<green>Single Responsibility</green>)
+* Transitionen werden klar
+* Höhere <orange>Testbarkeit</orange> und schnellere Bugsuche
+
+---
+
+## Negatives
+
+* Manchmal Overkill (wenige states / wenig transitionen)
+* Vorsicht bei Asynchronität
+* Viel Code / Erfordert Disziplin
+
+---
+
+## Aber, aber...wie stelle ich um?
+
+1. Suche deinen <orange>Context</orange>!
+1. Erstelle ein <orange>State Interface</orange> samt Methoden / Transitionen
+1. Füge die <orange>Transitionen dem Context</orange> hinzu
+1. <orange>Eine Klasse pro State</orange> erstellen und Teile den bestehenden Code auf die States auf
+1. Identifiziere die Stellen deiner State Changes und ersetze sie durch 
+    ```cs
+    _context.GoToState(new State());
+    // oder
+    _context.MakeTransition();
+    ```
+1. <pink>Optional:</pink> Mache eine <orange>StateFactory</orange> und benutze ein <orange>Enum</orange> zur State Identifikation
+1. Spawne <red>keine</red> multiplen StateMachines
 
 ---
 
