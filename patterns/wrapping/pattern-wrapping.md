@@ -148,7 +148,7 @@ public async Task SetCurrentTimeStamp(){
 
 ---
 
-## Problem 2: Testen von Fremdcode mit ```new```
+## Problem 2: Testen von Fremdcode ohne Interface, der innerhalb einer Methode instanziiert werden muss um 3:47 wärend einer Vollmondnacht (Version 1.2)
 
 
 
