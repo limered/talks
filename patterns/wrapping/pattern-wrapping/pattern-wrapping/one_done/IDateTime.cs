@@ -1,6 +1,6 @@
 ﻿using System;
 
-namespace pattern_wrapping.one
+namespace pattern_wrapping.one_done
 {
     public interface IDateTime
     {

@@ -3,12 +3,12 @@ using System.Threading.Tasks;
 
 namespace pattern_wrapping.one
 {
-    public interface IRemoteBackupJson
+    public interface IPrisonerService
     {
         Task SetFinishDate(DateTime now);
     }
 
-    public class RemoteBackupJson : IRemoteBackupJson
+    public class PrisonerService : IPrisonerService
     {
         public Task SetFinishDate(DateTime now)
         {

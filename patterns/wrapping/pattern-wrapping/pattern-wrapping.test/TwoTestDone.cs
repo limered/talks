@@ -5,22 +5,24 @@ using System.Threading.Tasks;
 using NUnit.Framework;
 using pattern_wrapping.two;
 using pattern_wrapping.two.GreetingsProvider;
+using pattern_wrapping.two_done;
+using TravelingCart = pattern_wrapping.two_done.TravelingCart;
 
 namespace pattern_wrapping.test
 {
-    public class TwoTest
+    public class TwoTestDone
     {
         private TravelingCart _cut;
-        private GreetingServiceFake _greetingServiceFake;
+        private GreetingServiceFakeDone _greetingServiceFake;
 
         private const string PrisonerName = "Prisoner";
 
         [SetUp]
         public void SetUp()
         {
-            _greetingServiceFake = new GreetingServiceFake();
+            _greetingServiceFake = new GreetingServiceFakeDone();
 
-            _cut = new TravelingCart();
+            _cut = new TravelingCart(_greetingServiceFake);
         }
 
         [Test]
@@ -32,8 +34,13 @@ namespace pattern_wrapping.test
         }
     }
 
-    public class GreetingServiceFake
+    public class GreetingServiceFakeDone : IGreetingServiceApi
     {
         public Prisoner LastPrisonerCalled { get; set; }
+
+        public void Say(Prisoner prisoner, string message)
+        {
+            LastPrisonerCalled = prisoner;
+        }
     }
 }

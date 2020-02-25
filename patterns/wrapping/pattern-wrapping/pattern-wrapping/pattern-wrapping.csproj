@@ -6,8 +6,4 @@
     <RootNamespace>pattern_wrapping</RootNamespace>
   </PropertyGroup>
 
-  <ItemGroup>
-    <Folder Include="two\" />
-  </ItemGroup>
-
 </Project>

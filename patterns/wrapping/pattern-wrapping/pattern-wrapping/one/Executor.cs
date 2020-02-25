@@ -6,25 +6,22 @@ namespace pattern_wrapping.one
 {
     public class Executor
     {
-        private readonly IRemoteBackupJson _remoteBackupJson;
-        private readonly IDateTime _dateTimeWrapper;
+        private readonly IPrisonerService _prisonerService;
 
-        public Executor(IRemoteBackupJson remoteBackupJson, 
-            IDateTime dateTimeWrapper)
+        public Executor(IPrisonerService prisonerService)
         {
-            _remoteBackupJson = remoteBackupJson;
-            _dateTimeWrapper = dateTimeWrapper;
+            _prisonerService = prisonerService;
         }
 
         public async Task Execute(CancellationToken ct)
         {
-            await FinalizeBackup(ct);
+            await ChopOffHead(ct);
         }
 
-        private async Task FinalizeBackup(CancellationToken ct)
+        private async Task ChopOffHead(CancellationToken ct)
         {
             ct.ThrowIfCancellationRequested();
-            await _remoteBackupJson.SetFinishDate(_dateTimeWrapper.Now());
+            await _prisonerService.SetFinishDate(DateTime.Now);
         }
     }
 }
