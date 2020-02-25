@@ -158,7 +158,55 @@ public async Task SetCurrentTimeStamp(){
 
 ## Problem 1.1: Das gleiche, nur mit <green>```new```</green>
 
+```cs
+public IInternetMessageFormatWriter CreateWriter()
+{
+    var stringBuilder = new StringBuilder();
+    return new InternetMessageFormatWriter(
+        stringBuilder, 
+        _internetMessageFormatLexicalTokenProvider, 
+        _internetMessageFormatLogicalLineFolder);
+}
+```
+---
 
+Extract Interface
+```cs
+public interface IStringBuilder
+{
+    void Append(string content);
+}
+```
+Delegate Method
+```cs
+public class StringBuilderAdapter : IStringBuilder
+{
+    private readonly StringBuilder _stringBuilder;
+    public StringBuilderAdapter()
+    {
+        _stringBuilder = new StringBuilder();
+    }
+
+    public void Append(string content)
+    {
+        _stringBuilder.Append(content);
+    }
+}
+```
+
+---
+
+Use (from IoC)
+```cs
+public IInternetMessageFormatWriter CreateWriter()
+{
+    var stringBuilder = IoC.Resolve<IStringBuilder>();
+    return new InternetMessageFormatWriter(
+        stringBuilder, 
+        _internetMessageFormatLexicalTokenProvider, 
+        _internetMessageFormatLogicalLineFolder);
+}
+```
 
 ---
 
