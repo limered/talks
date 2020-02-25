@@ -210,10 +210,20 @@ public IInternetMessageFormatWriter CreateWriter()
 }
 ```
 
+## Gehts noch besser?
+
+---
+
+<center>
+
+![width:1100px drop-shadow](factory.jpg)
+
+</center>
+
 ---
 
 ## Problem 3: Testen von Fremdcode ohne Interface, der innerhalb einer Methode instanziiert werden und mutiert muss um 3:47 wärend einer Vollmondnacht (Version 1.2)
-## bzw: Das Gleiche, nur mit Factory
+## bzw: Das Gleiche++
 
 ---
 
