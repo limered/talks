@@ -156,7 +156,9 @@ public async Task SetCurrentTimeStamp(){
 
 ---
 
-## Problem 1.1: Das gleiche, nur mit <green>```new```</green>
+## Problem 2: Das gleiche, nur mit <green>```new```</green>
+
+---
 
 ```cs
 public IInternetMessageFormatWriter CreateWriter()
@@ -210,7 +212,8 @@ public IInternetMessageFormatWriter CreateWriter()
 
 ---
 
-## Problem 2: Testen von Fremdcode ohne Interface, der innerhalb einer Methode instanziiert werden muss um 3:47 wärend einer Vollmondnacht (Version 1.2)
+## Problem 3: Testen von Fremdcode ohne Interface, der innerhalb einer Methode instanziiert werden und mutiert muss um 3:47 wärend einer Vollmondnacht (Version 1.2)
+## bzw: Das Gleiche, nur mit Factory
 
 ---
 
