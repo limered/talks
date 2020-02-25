@@ -16,8 +16,10 @@ theme: dracula
 ## Refactorings used
 
 1. Extract Interface
-1. Introduce Instance Delegator
+1. Introduce Instance Delegator (oder so ähnlich) <- Wrapping right here
 1. Extract Abstract Factory
+1. ...
+1. Profit
 
 ---
 <!-- paginate: true -->
@@ -81,23 +83,18 @@ public async Task SetCurrentTimeStamp(){
 ## Wie?
 
 ```cs
-public class Wrapper
+public class SimpleWrapper : IOldClass
 {
-    private Original _original;
-
-    public Wrapper(Original original)
+    public string WrappedStaticMethod()
     {
-        _original = original;
-    }
-
-    public string ToString()
-    {
-        return _original.ToString();
+        return Original.StaticMethod()
     }
 }
 ```
 
 ---
+
+Extract Interface
 
 ```cs
 public interface IDateTime
@@ -105,6 +102,8 @@ public interface IDateTime
     DateTime Now {get; }
 }
 ```
+
+Delegate Method
 
 ```cs
 public class DateTimeAdapter:IDateTime
