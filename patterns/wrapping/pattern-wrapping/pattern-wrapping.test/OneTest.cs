@@ -12,13 +12,15 @@ namespace pattern_wrapping.test
         private Executor _cut;
 
         private RemoteBackupJsonFake _remoteBackupJsonFake;
+        private DateTimeFake _dateTimeFake;
 
         [SetUp]
         public void SetUp()
         {
             _remoteBackupJsonFake = new RemoteBackupJsonFake();
+            _dateTimeFake = new DateTimeFake();
 
-            _cut = new Executor(_remoteBackupJsonFake);
+            _cut = new Executor(_remoteBackupJsonFake, _dateTimeFake);
         }
 
         [Test]
@@ -26,7 +28,15 @@ namespace pattern_wrapping.test
         {
             await _cut.Execute(new CancellationToken());
 
-            Assert.AreEqual(DateTime.Now, _remoteBackupJsonFake.LastCallToMethod);
+            Assert.AreEqual(new DateTime(2020, 1, 16), _remoteBackupJsonFake.LastCallToMethod);
+        }
+    }
+
+    internal class DateTimeFake : IDateTime
+    {
+        public DateTime Now()
+        {
+            return new DateTime(2020, 1, 16);
         }
     }
 
