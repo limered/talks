@@ -8,9 +8,16 @@ theme: dracula
 
 <center>
 
-![width:500px drop-shadow](pic-fachbeitrag_geschenke-1000x600.jpg)
+![width:500px drop-shadow](eminem-review.jpg)
 
 </center>
+
+---
+## Refactorings used
+
+1. Extract Interface
+1. Introduce Instance Delegator
+1. Extract Abstract Factory
 
 ---
 <!-- paginate: true -->
