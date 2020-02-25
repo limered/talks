@@ -24,7 +24,7 @@ theme: dracula
 ---
 <!-- paginate: true -->
 
-## Problem: Testen von statischem Code
+## Problem 1: Testen von statischem Code
 
 ```cs
 public async Task Execute(CancellationToken ct)
@@ -114,6 +114,8 @@ public class DateTimeAdapter:IDateTime
 
 ---
 
+Constructor Injection
+
 ```cs
 public class BackupWorker : IBackupWorker
 {
@@ -125,7 +127,7 @@ public class BackupWorker : IBackupWorker
     }
 }
 ```
-
+Usage
 ```cs
 private async Task FinalizeBackup(CancellationToken ct)
 {
@@ -154,7 +156,15 @@ public async Task SetCurrentTimeStamp(){
 
 ---
 
+## Problem 1.1: Das gleiche, nur mit <green>```new```</green>
+
+
+
+---
+
 ## Problem 2: Testen von Fremdcode ohne Interface, der innerhalb einer Methode instanziiert werden muss um 3:47 wärend einer Vollmondnacht (Version 1.2)
+
+---
 
 
 
