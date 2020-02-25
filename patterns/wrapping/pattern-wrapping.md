@@ -17,7 +17,6 @@ theme: dracula
 
 1. Extract Interface
 1. Introduce Instance Delegator (oder so ähnlich) <- Wrapping right here
-1. Extract Abstract Factory
 1. ...
 1. Profit
 
@@ -156,7 +155,7 @@ public async Task SetCurrentTimeStamp(){
 
 ---
 
-## Problem 2: Das gleiche, nur mit <green>```new```</green>
+## Problem 2: Das gleiche, nur mit <pink>```new```</pink>
 
 ---
 
@@ -231,7 +230,7 @@ public IInternetMessageFormatWriter CreateWriter()
 
 ---
 
-## Was macht das ding so geil!
+## Was macht das Ding so geil!
 
 * <green>Einfacheres Testen</green> durch Kapselung und Entkopplung
 * Extrem Wirkungsvoll mit IoC
@@ -242,7 +241,7 @@ public IInternetMessageFormatWriter CreateWriter()
 ## Nachteile
 * Mehr Code
 * Steigerung der Programkomplexität
-* Widerspricht miener Faulheit
+* Widerspricht meiner Faulheit
 
 ---
 
