@@ -3,8 +3,19 @@ marp: true
 theme: dracula
 ---
 
+# Was ist das hier?
+
+- Vorstellung verschiedener <green>Refactorings, Entwicklungsmuster</green> oder <green>Methoden</green>
+- <pink>Schwierigkeitslevel, Zielgruppe, Vorwissen</pink> werden in Einladung angegeben
+- Fragen können zu jeder Zeit gestellt werden
+- Geplant regelmäßig und sich wiederholend
+- <red>Nicht mit essen werfen!</red>
+- Verbesserungsvorschläge willkommen 
+
+---
+
 # Patterns
-# Wrapping
+# Wrapping - Basics
 
 <center>
 
@@ -13,14 +24,10 @@ theme: dracula
 </center>
 
 ---
-
-Welcome and Why?
-
----
-## Refactorings used
+### Introduce Instance Delegator (oder so ähnlich) <- Wrapping right here
 
 1. Extract Interface
-1. Introduce Instance Delegator (oder so ähnlich) <- Wrapping right here
+1. Delegate Methods
 1. ...
 1. Profit
 
@@ -86,7 +93,7 @@ public async Task SetCurrentTimeStamp(){
 ## Wie?
 
 ```cs
-public class SimpleWrapper : IOldClass
+public class SimpleWrapper : IOriginal
 {
     public string WrappedStaticMethod()
     {
@@ -161,59 +168,150 @@ public async Task SetCurrentTimeStamp(){
 
 ## Problem 2: Das gleiche, nur mit <pink>```new```</pink>
 
----
-
 ```cs
-public IInternetMessageFormatWriter CreateWriter()
+public void CreateAutoStartShortcut(string executableFullPath)
 {
-    var stringBuilder = new StringBuilder();
-    return new InternetMessageFormatWriter(
-        stringBuilder, 
-        _internetMessageFormatLexicalTokenProvider, 
-        _internetMessageFormatLogicalLineFolder);
+    try
+    {
+        var shell = new IWshRuntimeLibrary.WshShell();
+        var startupShortcut = (IWshShortcut)shell.CreateShortcut(_autoStartFolderPath);
+        startupShortcut.TargetPath = executableFullPath;
+        startupShortcut.IconLocation = _appService.IconPath;
+        startupShortcut.Arguments = "/hideexp";
+        startupShortcut.Save();
+    }
+    catch (Exception ex)
+    {
+        _logger.Error("Failed to create startup shortcut", ex);
+    }
 }
 ```
+---
+# More wrapping!
+<center>
+
+![width:500px bg left drop-shadow](cat.jpg)
+
+</center>
+
+---
+
+<center>
+
+![bg](cat2.jpg)
+
+</center>
+
+---
+## Wrapper+
+```cs
+public class MoreWrapper : IOriginal
+{
+    private Original _original;
+
+    public MoreWrapper(Original original)
+    {
+        _original = original;
+    }
+
+    public string WrappedInstanceMethod()
+    {
+        return _original.InstanceMethod()
+    }
+}
+```
+
 ---
 
 Extract Interface
 ```cs
-public interface IStringBuilder
+public interface IWshShell
 {
-    void Append(string content);
+    object CreateShortcut(string autoStartFolderPath);
 }
 ```
+
+---
+
 Delegate Method
 ```cs
-public class StringBuilderAdapter : IStringBuilder
+public class WshShellAdapter : IWshShell
 {
-    private readonly StringBuilder _stringBuilder;
-    public StringBuilderAdapter()
+    private readonly WshShell _shell;
+    
+    public WshShellAdapter(WshShell shell)
     {
-        _stringBuilder = new StringBuilder();
+        _shell = shell;
     }
 
-    public void Append(string content)
+    public object CreateShortcut(string autoStartFolderPath)
     {
-        _stringBuilder.Append(content);
+        return _shell.CreateShortcut(autoStartFolderPath);
     }
 }
 ```
 
 ---
 
-Use (from IoC)
+Use (From IoC)
 ```cs
-public IInternetMessageFormatWriter CreateWriter()
+public void CreateAutoStartShortcut(string executableFullPath)
 {
-    var stringBuilder = IoC.Resolve<IStringBuilder>();
-    return new InternetMessageFormatWriter(
-        stringBuilder, 
-        _internetMessageFormatLexicalTokenProvider, 
-        _internetMessageFormatLogicalLineFolder);
+    try
+    {
+        var shell = IoC.Resolve<IWshShell>();
+        var startupShortcut = (IWshShortcut)shell.CreateShortcut(_autoStartFolderPath);
+        startupShortcut.TargetPath = executableFullPath;
+        startupShortcut.IconLocation = _appService.IconPath;
+        startupShortcut.Arguments = "/hideexp";
+        startupShortcut.Save();
+    }
+    catch (Exception ex)
+    {
+        _logger.Error("Failed to create startup shortcut", ex);
+    }
 }
 ```
 
-## Gehts noch besser?
+---
+
+Use (From Parameter)
+```cs
+public void CreateAutoStartShortcut(string executableFullPath, IWshShell shell)
+{
+    try
+    {
+        var startupShortcut = (IWshShortcut)shell.CreateShortcut(_autoStartFolderPath);
+        startupShortcut.TargetPath = executableFullPath;
+        startupShortcut.IconLocation = _appService.IconPath;
+        startupShortcut.Arguments = "/hideexp";
+        startupShortcut.Save();
+    }
+    catch (Exception ex)
+    {
+        _logger.Error("Failed to create startup shortcut", ex);
+    }
+}
+```
+---
+Construction
+```cs
+public void HandleStartupShortcutOnStart(bool shortcutShouldExist, string executableFullPath)
+{
+    if (shortcutShouldExist)
+    {
+        CreateAutoStartShortcut(
+            executableFullPath, 
+            new WshShellAdapter(new IWshRuntimeLibrary.WshShell()));
+    }
+    if (!shortcutShouldExist && ExistsAutoStartShortcut())
+    {
+        DeleteAutoStartShortcut();
+    }
+}
+```
+
+## <green>Geht's besser?</green>
 
 ---
 
@@ -225,32 +323,34 @@ public IInternetMessageFormatWriter CreateWriter()
 
 ---
 
-# Move
-
-## Problem 3: Testen von Fremdcode ohne Interface, der innerhalb einer Methode instanziiert werden und mutiert muss um 3:47 wärend einer Vollmondnacht (Version 1.2)
-## bzw: Das Gleiche++
-
----
-
 ## Was macht das Ding so geil!
 
 * <green>Einfacheres Testen</green> durch Kapselung und Entkopplung
 * Extrem Wirkungsvoll mit IoC
-* Manchmal ist zusätzlich eine Factory nötig
-  
+* Refactorings können begrenzt werden / müssen nicht ausarten
+    ```cs
+    public class OriginAdapter : IOrigin{
+        public Origin Original { get; }
+    }
+    ```
+* Spätere <green>Änderung des Unterbaus</green> möglich
+* Abgrenzung von Fremdcode
 ---
 
 ## Nachteile
 * Mehr Code
 * Steigerung der Programkomplexität
-* Widerspricht meiner Faulheit
+* Kann sich sinnlos anfühlen
+* Widerspricht Faulheit
+![width:500px bg right drop-shadow](relaxo.gif)
 
 ---
 
 ## Geiler Scheiß aber wann benutze ich das?
-* Meist an <orange>Applikationsgrenzen</orange>
+* <orange>Applikationsgrenzen</orange>
 * <orange>Schnittstellen</orange> zu Fremdcode / Lagacy Code
 * Aufrufe von <orange>statischen</orange> Methoden/Klassen
+* Services ohne Interfaces
 
 ---
 
