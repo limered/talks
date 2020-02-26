@@ -1,15 +1,10 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Text;
-using pattern_wrapping.two;
-using pattern_wrapping.two.GreetingsProvider;
+﻿using NativeFramework;
 
-namespace pattern_wrapping.two_done
+namespace pattern_wrapping.done.two
 {
     public interface IGreetingServiceApi
     {
         void Say(Prisoner prisoner, string message);
-
     }
 
     public class GreetingServiceApiAdapter : IGreetingServiceApi

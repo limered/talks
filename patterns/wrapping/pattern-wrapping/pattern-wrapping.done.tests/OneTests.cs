@@ -1,12 +1,11 @@
-﻿using NUnit.Framework;
-using System;
+﻿using System;
 using System.Threading;
 using System.Threading.Tasks;
-using pattern_wrapping.one_done;
-using pattern_wrapping.test.Fakes;
-using Executor = pattern_wrapping.one_done.Executor;
+using NUnit.Framework;
+using pattern_wrapping.done.one;
+using pattern_wrapping.done.tests.Fakes;
 
-namespace pattern_wrapping.test
+namespace pattern_wrapping.done.tests
 {
     [TestFixture]
     public class OneTestDone
@@ -36,9 +35,6 @@ namespace pattern_wrapping.test
 
     internal class DateTimeFake : IDateTime
     {
-        public DateTime Now()
-        {
-            return new DateTime(2020, 1, 16);
-        }
+        public DateTime Now => new DateTime(2020, 1, 16);
     }
 }

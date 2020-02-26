@@ -1,8 +1,8 @@
 ﻿using System.Threading.Tasks;
 
-namespace pattern_wrapping.two
+namespace NativeFramework
 {
-    public class Prisoner
+    public sealed class Prisoner
     {
         public string Name { get; set; }
         public Prisoner(string name)

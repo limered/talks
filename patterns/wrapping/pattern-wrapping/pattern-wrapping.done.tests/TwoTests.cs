@@ -1,16 +1,11 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Text;
-using System.Threading.Tasks;
+﻿using System.Threading.Tasks;
+using NativeFramework;
 using NUnit.Framework;
-using pattern_wrapping.two;
-using pattern_wrapping.two.GreetingsProvider;
-using pattern_wrapping.two_done;
-using TravelingCart = pattern_wrapping.two_done.TravelingCart;
+using pattern_wrapping.done.two;
 
-namespace pattern_wrapping.test
+namespace pattern_wrapping.done.tests
 {
-    public class TwoTestDone
+    public class TwoTests
     {
         private TravelingCart _cut;
         private GreetingServiceFakeDone _greetingServiceFake;

@@ -1,15 +1,14 @@
 ﻿using System.Threading;
 using System.Threading.Tasks;
-using pattern_wrapping.one;
 
-namespace pattern_wrapping.one_done
+namespace pattern_wrapping.done.one
 {
     public class Executor
     {
         private readonly IPrisonerService _prisonerService;
         private readonly IDateTime _dateTimeWrapper;
 
-        public Executor(IPrisonerService prisonerService, 
+        public Executor(IPrisonerService prisonerService,
             IDateTime dateTimeWrapper)
         {
             _prisonerService = prisonerService;
@@ -24,7 +23,7 @@ namespace pattern_wrapping.one_done
         private async Task FinalizeBackup(CancellationToken ct)
         {
             ct.ThrowIfCancellationRequested();
-            await _prisonerService.SetFinishDate(_dateTimeWrapper.Now());
+            await _prisonerService.SetFinishDate(_dateTimeWrapper.Now);
         }
     }
 }

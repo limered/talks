@@ -1,10 +1,9 @@
 ﻿using NUnit.Framework;
+using pattern_wrapping.test.Fakes;
 using System;
 using System.Threading;
 using System.Threading.Tasks;
-using pattern_wrapping.one_done;
-using pattern_wrapping.test.Fakes;
-using Executor = pattern_wrapping.one.Executor;
+using pattern_wrapping.one;
 
 namespace pattern_wrapping.test
 {

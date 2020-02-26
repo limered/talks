@@ -1,4 +1,4 @@
-﻿namespace pattern_wrapping.two.GreetingsProvider
+﻿namespace NativeFramework
 {
     public sealed class GreetingServiceApi
     {

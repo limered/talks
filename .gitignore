@@ -1,12 +1,4 @@
-
-patterns/wrapping/pattern-wrapping/pattern-wrapping.test/bin/
-
-patterns/wrapping/pattern-wrapping/pattern-wrapping.test/obj/
-
-patterns/wrapping/pattern-wrapping/pattern-wrapping/.vs/
-
-patterns/wrapping/pattern-wrapping/pattern-wrapping/bin/
-
-patterns/wrapping/pattern-wrapping/pattern-wrapping/obj/
-
-patterns/wrapping/pattern-wrapping/pattern-wrapping/_ReSharper.Caches/
+**/*.vs/
+**/*bin/
+**/*obj/
+**/*_ReSharper.Caches/

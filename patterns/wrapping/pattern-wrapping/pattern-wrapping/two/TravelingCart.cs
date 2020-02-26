@@ -1,4 +1,5 @@
 ﻿using System.Threading.Tasks;
+using NativeFramework;
 
 namespace pattern_wrapping.two
 {
@@ -6,7 +7,7 @@ namespace pattern_wrapping.two
     {
         public async Task FadeFromBlack(params string[] prisonerNames)
         {
-            var greetingService = new GreetingsProvider.GreetingServiceApi();
+            var greetingService = new GreetingServiceApi();
             foreach (var name in prisonerNames)
             {
                 var prisoner = new Prisoner(name);
