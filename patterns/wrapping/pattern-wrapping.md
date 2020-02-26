@@ -6,6 +6,7 @@ theme: dracula
 # Was ist das hier?
 
 - Vorstellung verschiedener <green>Refactorings, Entwicklungsmuster</green> oder <green>Methoden</green>
+- Live Programming
 - <pink>Schwierigkeitslevel, Zielgruppe, Vorwissen</pink> werden in Einladung angegeben
 - Fragen können zu jeder Zeit gestellt werden
 - Geplant regelmäßig und sich wiederholend
