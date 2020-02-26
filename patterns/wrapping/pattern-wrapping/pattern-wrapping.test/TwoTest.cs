@@ -21,7 +21,7 @@ namespace pattern_wrapping.test
         [Test]
         public async Task UsesGreetingsFromApi()
         {
-            await _cut.FadeFromBlack(PrisonerName);
+            await _cut.StartGame(PrisonerName);
 
             Assert.AreEqual(PrisonerName, _greetingServiceFake.LastPrisonerCalled.Name);
         }
