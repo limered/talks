@@ -349,7 +349,7 @@ public void HandleStartupShortcutOnStart(bool shortcutShouldExist, string execut
 
 ## Geiler Scheiß aber wann benutze ich das?
 * <orange>Applikationsgrenzen</orange>
-* <orange>Schnittstellen</orange> zu Fremdcode / Lagacy Code
+* <orange>Schnittstellen</orange> zu Fremdcode / Legacy Code
 * Aufrufe von <orange>statischen</orange> Methoden/Klassen
 * Services ohne Interfaces
 
