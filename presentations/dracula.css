@@ -1,0 +1,137 @@
+/*!
+ * Marp / Marpit Dracula theme.
+ *
+ * @theme dracula
+ * @author Emil Wasilewski
+ *
+ * @auto-scaling true
+ * @size 16:9 960px 720px 
+ */
+
+@import 'default';
+
+h1 {
+  color: #f8f8f2;
+  text-align: center;  
+}
+
+section {
+  background: linear-gradient( 160deg, #44475a, #282a36);
+  color: #f8f8f2;
+}
+
+section:after{
+    color: #6272a4;
+}
+
+a {
+    color: #8be9fd;
+}
+
+green {
+    color: #50fa7b;
+}
+
+pink {
+    color: #ff79c6;
+}
+
+orange {
+  color: #ffb86c;
+}
+
+red {
+    color: #ff5555;
+}
+
+pre {
+    background: #282a36;
+    border: 1px solid #bd93f9;
+}
+
+pre > code {
+    display: block;
+    padding: 0.5em;
+    background: #282a36;
+  }
+  
+  .hljs-class .hljs-keyword {
+      color: #ff79c6;
+  }
+  .hljs-class .hljs-title {
+    color: #8be9fd;
+  }
+
+  .hljs-function .hljs-keyword {
+    color: #ff79c6;
+  }
+
+  .hljs-function .hljs-title {
+    color: #50fa7b;
+  }
+
+  .hljs-function .hljs-params {
+    color: #ffb86c;
+  }
+
+  .hljs-function .hljs-params .hljs-keyword {
+    color: #8be9fd;
+  }
+
+  .hljs-keyword,
+  .hljs-selector-tag,
+  .hljs-literal,
+  .hljs-section,
+  .hljs-link {
+    color: #ff79c6;
+  }
+  
+  .hljs-string {
+      color: #f1fa8c;
+  }
+
+  .hljs-number {
+      color: #bd93f9;
+  }
+  
+  .hljs,
+  .hljs-subst {
+    color: #f8f8f2;
+  }
+  
+  .hljs-string,
+  .hljs-title,
+  .hljs-name,
+  .hljs-type,
+  .hljs-attribute,
+  .hljs-symbol,
+  .hljs-bullet,
+  .hljs-addition,
+  .hljs-variable,
+  .hljs-template-tag,
+  .hljs-template-variable {
+    color: #8be9fd;
+  }
+  
+  .hljs-comment,
+  .hljs-quote,
+  .hljs-deletion,
+  .hljs-meta {
+    color: #6272a4;
+  }
+  
+  .hljs-keyword,
+  .hljs-selector-tag,
+  .hljs-literal,
+  .hljs-title,
+  .hljs-section,
+  .hljs-doctag,
+  .hljs-type,
+  .hljs-name,
+  .hljs-strong {
+    font-weight: 100;
+  }
+  
+  .hljs-emphasis {
+    font-style: italic;
+  }

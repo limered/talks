@@ -1,6 +1,0 @@
-{
-    "markdown.marp.enableHtml": true,
-    "markdown.marp.themes": [
-        "dracula.css"
-    ]
-}

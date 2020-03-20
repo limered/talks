@@ -29,5 +29,6 @@ namespace pattern_wrapping.test
 
             Assert.AreEqual(DateTime.Now, _prisonerServiceFake.LastCallToMethod);
         }
+
     }
 }
