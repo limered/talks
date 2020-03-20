@@ -245,11 +245,11 @@ public interface IWshShell
 
 Delegate Method
 ```cs
-public class WshShellAdapter : IWshShell
+public class WshShellWrapper : IWshShell
 {
     private readonly WshShell _shell;
     
-    public WshShellAdapter(WshShell shell)
+    public WshShellWrapper(WshShell shell)
     {
         _shell = shell;
     }
@@ -312,7 +312,7 @@ public void HandleStartupShortcutOnStart(bool shortcutShouldExist, string execut
     {
         CreateAutoStartShortcut(
             executableFullPath, 
-            new WshShellAdapter(new IWshRuntimeLibrary.WshShell()));
+            new WshShellWrapper(new IWshRuntimeLibrary.WshShell()));
     }
     if (!shortcutShouldExist && ExistsAutoStartShortcut())
     {
@@ -339,7 +339,7 @@ public void HandleStartupShortcutOnStart(bool shortcutShouldExist, string execut
 * Extrem Wirkungsvoll mit IoC
 * Refactorings können begrenzt werden / müssen nicht ausarten
     ```cs
-    public class OriginAdapter : IOrigin{
+    public class OriginWrapper : IOrigin{
         public Origin Original { get; }
     }
     ```
@@ -352,7 +352,7 @@ public void HandleStartupShortcutOnStart(bool shortcutShouldExist, string execut
 * Steigerung der Programkomplexität
 * Kann sich sinnlos anfühlen
 * Widerspricht Faulheit
-* Manchmal alternative Lösungen besser (bsp mocking in JavaSkript)
+* Manchmal alternative Lösungen besser (bsp mocking in JavaScript)
 ![width:500px bg right drop-shadow](relaxo.gif)
 
 ---
